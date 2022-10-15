@@ -1,11 +1,18 @@
+from typing import List
 from models import (
     NebulaChannelVideoContentResponseModel,
     NebulaUserAPIAuthorizationTokenResponseModel,
     NebulaVideoContentStreamingResponseModel,
-    NebulaVideoContentStreamingResponseModel,
     NebulaChannelVideoContentEpisodes,
 )
-from config import *
+from config import (
+    NEBULA_API_CONTENT_ALL_VIDEOS,
+    NEBULA_API_CONTENT_VIDEO_CHANNELS,
+    NEBULA_API_VIDEO_STREAM_INFORMATION,
+    NEBULA_USERAPI_AUTHORIZATION,
+    TOKEN_NEBULA_FINAL_AUTHORIZATION,
+    TOKEN_NEBULA_USERAPI_AUTHORIZATION,
+)
 import requests
 import logging
 from time import sleep
@@ -50,7 +57,9 @@ def get_channel_video_content(
     if response.status_code == 200:
         currentData = NebulaChannelVideoContentResponseModel(**response.json())
         logging.info(
-            f"Received {len(currentData.episodes.results)} videos from channel `{channel_slug}`"
+            "Received %s videos from channel `%s`",
+            len(currentData.episodes.results),
+            channel_slug,
         )
         while currentData.episodes.next is not None:
             response = requests.get(
@@ -62,7 +71,10 @@ def get_channel_video_content(
             if response.status_code == 200:
                 data = NebulaChannelVideoContentResponseModel(**response.json())
                 logging.info(
-                    f"Received {len(data.episodes.results)} videos from channel `{channel_slug}` (next page) (total videos: {len(currentData.episodes.results)})"
+                    "Received %s videos from channel `%s` (next page) (total videos: %s)",
+                    len(data.episodes.results),
+                    channel_slug,
+                    len(currentData.episodes.results),
                 )
                 currentData.episodes.results.extend(data.episodes.results)
                 currentData.episodes.next = data.episodes.next
@@ -90,7 +102,7 @@ def get_straming_info(video_slug: str) -> NebulaVideoContentStreamingResponseMod
         sleep(5)
         return get_straming_info(video_slug)
     elif response.status_code == 429:
-        logging.info(f"Thtrottled by Nebula API, waiting for 5 seconds...")
+        logging.info("Thtrottled by Nebula API, waiting for 5 seconds...")
         sleep(5)
         return get_straming_info(video_slug)
     raise Exception(
@@ -107,7 +119,7 @@ def get_all_channels_from_video_feed(cursorTimesLimit: int = 100) -> List[str]:
     )
     if response.status_code == 200:
         data = NebulaChannelVideoContentEpisodes(**response.json())
-        logging.info(f"Received {len(data.results)} episodes from video feed")
+        logging.info("Received %s episodes from video feed", len(data.results))
         cursorTimes = 0
         while data.next is not None and cursorTimes < cursorTimesLimit:
             response = requests.get(
@@ -119,7 +131,10 @@ def get_all_channels_from_video_feed(cursorTimesLimit: int = 100) -> List[str]:
             if response.status_code == 200:
                 cursoredData = NebulaChannelVideoContentEpisodes(**response.json())
                 logging.info(
-                    f"Received {len(cursoredData.results)} episodes from video feed (next page) (current page: {cursorTimes}; total episodes: {len(data.results)})"
+                    "Received %s episodes from video feed (next page) (current page: %s; total episodes: %s)",
+                    len(cursoredData.results),
+                    cursorTimes,
+                    len(data.results),
                 )
                 data.results.extend(cursoredData.results)
                 data.next = cursoredData.next
@@ -128,9 +143,11 @@ def get_all_channels_from_video_feed(cursorTimesLimit: int = 100) -> List[str]:
             raise Exception(
                 f"Failed to get video feed for next page: {response.content} with status code {response.status_code}"
             )
-        channels = list(set([x.channel_slug for x in data.results]))
+        channels = list({x.channel_slug for x in data.results})
         logging.info(
-            f"Found {len(channels)} channels in video feed in the last {cursorTimes} pages"
+            "Found %s channels in video feed in the last %s pages",
+            len(channels),
+            cursorTimes,
         )
         logging.debug(f"Channels: {channels}")
         return channels

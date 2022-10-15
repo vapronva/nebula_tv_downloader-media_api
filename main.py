@@ -48,16 +48,18 @@ def main() -> None:
         create_channel_subdirectory_and_store_information(
             channelSlug, channel_data.details, channel_data.episodes
         )
-        logging.info(f"Saved channel information for `{channelSlug}` to disk")
+        logging.info("Saved channel information for `%s` to disk", channelSlug)
         for episode in channel_data.episodes.results:
             if not Path(VIDEOS_OUTPUT_DIRECTORY / channelSlug / episode.slug).exists():
                 save_episode_streaming_information(
                     channelSlug, episode.slug, get_straming_info(episode.slug)
                 )
-                logging.info(f"Saved episode information for `{episode.slug}` to disk")
+                logging.info("Saved episode information for `%s` to disk", episode.slug)
                 continue
             logging.info(
-                f"Skipping episode `{episode.slug}` for channel `{channelSlug}` as it already exists"
+                "Skipping episode `%s` for channel `%s` as it already exists",
+                episode.slug,
+                channelSlug,
             )
 
 
