@@ -23,7 +23,7 @@ def download_video(
         "embedchapters": True,
         "subtitleslangs": ["en", "de", "ru"],
         "convertthumbnails": "jpg",
-        "max_filesize": "3900M",
+        "max_filesize": 3900000000,
     }
     with YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
@@ -36,7 +36,7 @@ def download_thumbnail(
         file.write(requests.get(url).content)
     img = Image.open(output_file)
     img.thumbnail(max_resolution, Image.Resampling.LANCZOS)
-    img.save(output_file, format="JPEG", quality=80, optimize=True, progressive=True)
+    img.save(output_file, format="JPEG", quality=70, optimize=True, progressive=True)
 
 
 def main() -> None:

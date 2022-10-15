@@ -11,9 +11,11 @@ from models import (
     NebulaVideoContentStreamingResponseModel,
     NebulaChannelVideoContentEpisodeResult,
 )
-from download import download_video
+from download import download_video, download_thumbnail
 import json
 from pathlib import Path
+import logging
+
 
 USER = Client(
     name="nebula-uploader-client",
@@ -21,6 +23,10 @@ USER = Client(
     api_hash=TELEGRAM_API_HASH,
     phone_number=TELEGRAM_USER_PHONENUMBER,
     no_updates=True,
+)
+
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s"
 )
 
 
@@ -33,18 +39,11 @@ def getEpisodeData(
     return None
 
 
-def generateBeautifulDescription(descritpion: str, limitChars: int = 768) -> str:
-    return (
-        descritpion[:limitChars] + "..."
-        if len(descritpion) > limitChars
-        else descritpion
-    )
-
-
 def main() -> None:
     global USER
     USER.start()
     for channel in sorted(VIDEOS_OUTPUT_DIRECTORY.iterdir()):
+        episodeCounter: int = 0
         epList: List[NebulaChannelVideoContentEpisodeResult] = [
             NebulaChannelVideoContentEpisodeResult.parse_obj(epifileinfo)
             for epifileinfo in json.load(open(channel / "episodes.json", "r"))
@@ -52,19 +51,24 @@ def main() -> None:
         for episodePath in channel.iterdir():
             if episodePath.is_dir():
                 try:
+                    epInfo = getEpisodeData(episodePath.name, epList)
                     with open(episodePath / "stream.json", "r") as file:
                         data = NebulaVideoContentStreamingResponseModel.parse_obj(
                             json.load(file)
                         )
+                    logging.info("Downloading video `%s`...", epInfo.slug)
                     download_video(
-                        data.manifest, episodePath, episodePath.name + ".mp4"
+                        data.manifest, episodePath, episodePath.name + ".mp4", True
                     )
-                    epInfo = getEpisodeData(episodePath.name, epList)
+                    download_thumbnail(
+                        epInfo.images.thumbnail.src, Path(episodePath / "thumb.jpg")
+                    )
+                    logging.info("Sendong video `%s` to Telegram...", epInfo.slug)
                     USER.send_video(
                         chat_id=TELEGRAM_CHANNEL_ID,
                         video=Path(episodePath / (episodePath.name + ".mp4")).__str__(),
                         caption=f"""#{epInfo.channel_slug.replace('-', '_')} — <b>{epInfo.title}</b>
-<i>{generateBeautifulDescription(epInfo.short_description, 384)}</i>
+<i>{epInfo.short_description[:384]}</i>
 
 - Published on <code>{epInfo.published_at}</code>
 - Duration: <code>{epInfo.duration}</code>
@@ -75,8 +79,17 @@ def main() -> None:
 - Categories: <code>{epInfo.category_slugs}</code>""",
                         disable_notification=True,
                         file_name=f"{epInfo.slug}.mp4",
+                        thumb=open(Path(episodePath / "thumb.jpg").__str__(), "rb"),
                     )
+                    logging.info("Video `%s` sent to Telegram!", epInfo.slug)
                     Path(episodePath / (episodePath.name + ".mp4")).unlink()
+                    episodeCounter += 1
+                    logging.info(
+                        "Episode `%s` processed! (%s out of %s)",
+                        epInfo.slug,
+                        episodeCounter,
+                        str(len(epList)),
+                    )
                 except Exception as e:  # skipcq: PYL-W0703
                     print(e)
                     continue
