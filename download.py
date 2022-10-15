@@ -32,7 +32,7 @@ def download_video(
 def download_thumbnail(
     url: str, output_file: Path, max_resolution: Tuple[int, int] = (320, 320)
 ) -> None:
-    with open(output_file, "wb") as file:
+    with open(output_file, "wb") as file:  # skipcq: PTC-W6004
         file.write(requests.get(url).content)
     img = Image.open(output_file)
     img.thumbnail(max_resolution, Image.Resampling.LANCZOS)

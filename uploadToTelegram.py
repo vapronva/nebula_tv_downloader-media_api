@@ -11,7 +11,7 @@ from models import (
     NebulaVideoContentStreamingResponseModel,
     NebulaChannelVideoContentEpisodeResult,
 )
-from download import download_video, download_thumbnail
+from download import download_video
 import json
 from pathlib import Path
 
@@ -77,9 +77,9 @@ def main() -> None:
                         file_name=f"{epInfo.slug}.mp4",
                     )
                     Path(episodePath / (episodePath.name + ".mp4")).unlink()
-                except Exception as e:
+                except Exception as e:  # skipcq: PYL-W0703
                     print(e)
-                    USER.stop()
+                    continue
 
 
 if __name__ == "__main__":
