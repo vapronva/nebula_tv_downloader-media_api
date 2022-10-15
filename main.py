@@ -40,7 +40,7 @@ def save_episode_streaming_information(
 
 
 def main() -> None:
-    global PARSE_NEBULA_CHANNLES_SLUGS
+    global PARSE_NEBULA_CHANNLES_SLUGS  # skipcq: PYL-W0603
     if len(PARSE_NEBULA_CHANNLES_SLUGS) == 0:
         PARSE_NEBULA_CHANNLES_SLUGS = get_all_channels_from_video_feed()
     for channelSlug in PARSE_NEBULA_CHANNLES_SLUGS:

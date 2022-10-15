@@ -25,7 +25,7 @@ __TOKEN_NEBULA_FINAL_AUTHORIZATION = TOKEN_NEBULA_FINAL_AUTHORIZATION
 
 
 def get_authorization_token(user_token: str) -> str:
-    global __TOKEN_NEBULA_FINAL_AUTHORIZATION
+    global __TOKEN_NEBULA_FINAL_AUTHORIZATION  # skipcq: PYL-W0603
     if __TOKEN_NEBULA_FINAL_AUTHORIZATION is None:
         response = requests.post(
             url=NEBULA_USERAPI_AUTHORIZATION,
@@ -37,7 +37,8 @@ def get_authorization_token(user_token: str) -> str:
             data = NebulaUserAPIAuthorizationTokenResponseModel(**response.json())
             __TOKEN_NEBULA_FINAL_AUTHORIZATION = data.token
             logging.info(
-                f"Successfully got Nebula authorization token: {__TOKEN_NEBULA_FINAL_AUTHORIZATION}"
+                "Successfully got Nebula authorization token: %s",
+                __TOKEN_NEBULA_FINAL_AUTHORIZATION,
             )
         raise Exception(
             f"Failed to get authorization token: {response.content} with status code {response.status_code}"
@@ -149,7 +150,7 @@ def get_all_channels_from_video_feed(cursorTimesLimit: int = 100) -> List[str]:
             len(channels),
             cursorTimes,
         )
-        logging.debug(f"Channels: {channels}")
+        logging.debug("Channels: %s", channels)
         return channels
     raise Exception(
         f"Failed to get video feed: {response.content} with status code {response.status_code}"
