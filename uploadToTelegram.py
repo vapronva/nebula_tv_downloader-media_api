@@ -44,7 +44,7 @@ def generateBeautifulDescription(descritpion: str, limitChars: int = 768) -> str
 def main() -> None:
     global USER
     USER.start()
-    for channel in VIDEOS_OUTPUT_DIRECTORY.iterdir():
+    for channel in sorted(VIDEOS_OUTPUT_DIRECTORY.iterdir()):
         epList: List[NebulaChannelVideoContentEpisodeResult] = [
             NebulaChannelVideoContentEpisodeResult.parse_obj(epifileinfo)
             for epifileinfo in json.load(open(channel / "episodes.json", "r"))
