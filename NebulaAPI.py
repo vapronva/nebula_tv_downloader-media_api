@@ -48,12 +48,3 @@ def get_channel_video_content(
     raise Exception(
         f"Failed to get channel video content: {response.content} with status code {response.status_code}"
     )
-
-
-def main():
-    CHANNEL_SLUG = "techaltar"
-    print(get_channel_video_content(CHANNEL_SLUG))
-
-
-if __name__ == "__main__":
-    main()

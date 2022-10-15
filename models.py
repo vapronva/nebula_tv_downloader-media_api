@@ -76,6 +76,7 @@ class NebulaChannelVideoContentEpisodeResult(BaseModel):
     duration: NonNegativeInt
     duration_to_complete: NonNegativeInt
     published_at: str
+    episode_url: Optional[HttpUrl]
     channel_id: str
     channel_slug: str
     channel_slugs: List[str]
