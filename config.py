@@ -19,6 +19,10 @@ NEBULA_USERAPI_AUTHORIZATION = parse_obj_as(
     HttpUrl, "https://users.api.nebula.app/api/v1/authorization/"
 )
 
+NEBULA_API_CONTENT_ALL_VIDEOS = parse_obj_as(
+    HttpUrl, "https://content.api.nebula.app/video/"
+)
+
 TOKEN_NEBULA_USERAPI_AUTHORIZATION: str = ""
 TOKEN_NEBULA_FINAL_AUTHORIZATION: Optional[str] = ""
 

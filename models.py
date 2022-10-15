@@ -3,10 +3,10 @@ from pydantic import BaseModel, HttpUrl, NonNegativeInt
 
 
 class NebulaChannelVideoContentDetailsAssets(BaseModel):
-    avatar: dict
-    banner: dict
-    hero: dict
-    featured: dict
+    avatar: Optional[dict]
+    banner: Optional[dict]
+    hero: Optional[dict]
+    featured: Optional[dict]
 
 
 class NebulaChannelVideoContentDetailsCategory(BaseModel):
@@ -46,7 +46,7 @@ class NebulaChannelVideoContentDetails(BaseModel):
     merch_collection: Optional[str]
     engagement: Optional[dict]
     playlists: List[NebulaChannelVideoContentDetailsPlaylist]
-    zype_id: str
+    zype_id: Optional[str]
 
 
 class NebulaChannelVideoContentEpisodeResultAssets(BaseModel):
@@ -85,7 +85,7 @@ class NebulaChannelVideoContentEpisodeResult(BaseModel):
     assets: NebulaChannelVideoContentEpisodeResultAssets
     images: NebulaChannelVideoContentEpisodeResultImages
     attributes: Optional[list]
-    share_url: HttpUrl
+    share_url: str
     channel: Optional[HttpUrl]
     engagement: Optional[dict]
     zype_id: str
@@ -104,3 +104,17 @@ class NebulaChannelVideoContentResponseModel(BaseModel):
 
 class NebulaUserAPIAuthorizationTokenResponseModel(BaseModel):
     token: str
+
+
+class NebulaVideoContentStreamSubtitles(BaseModel):
+    language_code: str
+    url: HttpUrl
+    language: str
+
+
+class NebulaVideoContentStreamingResponseModel(BaseModel):
+    manifest: HttpUrl
+    download: HttpUrl
+    iframe: HttpUrl
+    bif: dict
+    subtitles: List[NebulaVideoContentStreamSubtitles]
