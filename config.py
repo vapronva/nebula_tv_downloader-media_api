@@ -1,38 +1,51 @@
-from pathlib import Path
-from typing import List, Optional
-from pydantic import HttpUrl, parse_obj_as
+from configparser import ConfigParser
+from models.configuration import *
 
 
-NEBULA_API_CONTENT_VIDEO_CHANNELS = parse_obj_as(
-    HttpUrl, "https://content.api.nebula.app/video/channels/{CHANNEL_SLUG}/"
-)
-NEBULA_API_CONTENT_VIDEO_CHANNELS_CURSOR = parse_obj_as(
-    HttpUrl,
-    "https://content.api.nebula.app/video/channels/{CHANNEL_SLUG}/?cursor={CURSOR}",
-)
+class Config:
+    def __init__(self) -> None:
+        configOriginal = ConfigParser()
+        configOriginal.read("config.example.ini")
+        self.__CONFIG = ConfigurationModel(
+            NebulaAPI=ConfigurationNebulaAPIModel(
+                USER_API_TOKEN=configOriginal["NebulaAPI"]["USER_API_TOKEN"],
+                AUTHORIZATION_HEADER=configOriginal["NebulaAPI"][
+                    "AUTHORIZATION_HEADER"
+                ],
+            ),
+            NebulaFilters=ConfigurationNebulaFiltersModel(
+                CATEGORY_SEARCH=str(configOriginal["NebulaFilters"]["CATEGORY_SEARCH"]),
+                INCLUDE_NEBULA_FIRST=bool(
+                    configOriginal["NebulaFilters"]["INCLUDE_NEBULA_FIRST"]
+                ),
+                INCLUDE_NEBULA_PLUS=bool(
+                    configOriginal["NebulaFilters"]["INCLUDE_NEBULA_PLUS"]
+                ),
+                INCLUDE_REGULAR_VIDEOS=bool(
+                    configOriginal["NebulaFilters"]["INCLUDE_REGULAR_VIDEOS"]
+                ),
+                CHANNELS_TO_PARSE=configOriginal["NebulaFilters"][
+                    "CHANNELS_TO_PARSE"
+                ].split(",")
+                if configOriginal["NebulaFilters"]["CHANNELS_TO_PARSE"]
+                else None,
+            ),
+            Downloader=ConfigurationDownloaderModel(
+                DOWNLOAD_PATH=configOriginal["Downloader"]["DOWNLOAD_PATH"],
+            ),
+        )
 
-NEBULA_API_VIDEO_STREAM_INFORMATION = parse_obj_as(
-    HttpUrl, "https://content.api.nebula.app/video/{VIDEO_SLUG}/stream/"
-)
+    @property
+    def NebulaAPI(self) -> ConfigurationNebulaAPIModel:
+        return self.__CONFIG.NebulaAPI
 
-NEBULA_USERAPI_AUTHORIZATION = parse_obj_as(
-    HttpUrl, "https://users.api.nebula.app/api/v1/authorization/"
-)
+    @property
+    def NebulaFilters(self) -> ConfigurationNebulaFiltersModel:
+        return self.__CONFIG.NebulaFilters
 
-NEBULA_API_CONTENT_ALL_VIDEOS = parse_obj_as(
-    HttpUrl, "https://content.api.nebula.app/video/"
-)
+    @property
+    def Downloader(self) -> ConfigurationDownloaderModel:
+        return self.__CONFIG.Downloader
 
-TOKEN_NEBULA_USERAPI_AUTHORIZATION: str = ""
-TOKEN_NEBULA_FINAL_AUTHORIZATION: Optional[str] = ""
-
-PARSE_NEBULA_CHANNLES_SLUGS: List[str] = []
-
-VIDEOS_OUTPUT_DIRECTORY: Path = Path("./")
-
-TELEGRAM_API_ID: str = ""
-TELEGRAM_API_HASH: str = ""
-
-TELEGRAM_USER_PHONENUMBER: str = ""
-
-TELEGRAM_CHANNEL_ID: int = 0
+    def setNebulaAuthorizationToken(self, token: str) -> None:
+        self.__CONFIG.NebulaAPI.AUTHORIZATION_HEADER = token
