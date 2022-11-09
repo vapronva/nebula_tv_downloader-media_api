@@ -1,5 +1,5 @@
 from pathlib import Path
-from NebulaAPI import (
+from NebulaAPI.NebulaAPI import (
     get_channel_video_content,
     get_straming_info,
     get_all_channels_from_video_feed,

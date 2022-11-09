@@ -1,5 +1,10 @@
 from configparser import ConfigParser
-from models.configuration import *
+from models.configuration import (
+    ConfigurationModel,
+    ConfigurationNebulaAPIModel,
+    ConfigurationNebulaFiltersModel,
+    ConfigurationDownloaderModel,
+)
 
 
 class Config:

@@ -1,4 +1,4 @@
-from pydantic import BaseModel, HttpUrl, NonNegativeInt
+from pydantic import BaseModel, HttpUrl
 
 
 class NebulaChannelVideoContentDetailsAssets(BaseModel):
