@@ -15,6 +15,12 @@ class NebulaUserAuthorzation:
         logging.debug(
             "Fetching authorization token with user token %s...", self.__USER_TOKEN[:5]
         )
+        if self.__AUTHORIZATION_HEADER:
+            logging.debug(
+                "Authorization header already set (`%s...`), not fetching authorization token",
+                self.__AUTHORIZATION_HEADER[:10],
+            )
+            return
         response = requests_post(
             url=NEBULA_USERAPI_AUTHORIZATION,
             headers={"Authorization": f"Token {self.__USER_TOKEN}"},
@@ -24,7 +30,7 @@ class NebulaUserAuthorzation:
                 **response.json()
             ).token
             logging.info(
-                "Successfully fetched authorization token from Nebula API: %s...",
+                "Successfully fetched authorization token from Nebula API: `%s...`",
                 self.__AUTHORIZATION_HEADER[:10],
             )
             return

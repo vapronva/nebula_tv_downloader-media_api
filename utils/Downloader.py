@@ -1,8 +1,9 @@
 from yt_dlp import YoutubeDL
 from pathlib import Path
-import json
 import requests
 from PIL import Image
+from models.nebula.Streaming import NebulaVideoContentStreamSubtitles
+from urllib.parse import urlparse
 
 
 def download_video(
@@ -44,4 +45,23 @@ def download_thumbnail(
             maxResolution, Image.Resampling.LANCZOS
         ) if maxResolution is not None else None
         img.save(outputFile, format="JPEG", quality=85, optimize=True, progressive=True)
+    return
+
+
+def download_subtitles(
+    subtitiles: list[NebulaVideoContentStreamSubtitles],
+    outputDirectory: Path,
+) -> None:
+    for subtitle in subtitiles:
+        outputName: str = (
+            subtitle.language_code
+            + "-"
+            + urlparse(subtitle.url)
+            .path.split("/")[-1]
+            .replace("-", "_")
+            .replace(".", "_")
+        )
+        outputFilename: Path = outputDirectory / outputName
+        with open(outputFilename, "wb") as file:
+            file.write(requests.get(subtitle.url).content)
     return

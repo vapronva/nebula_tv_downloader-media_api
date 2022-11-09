@@ -1,4 +1,5 @@
 from configparser import ConfigParser
+from pathlib import Path
 from models.configuration import (
     ConfigurationModel,
     ConfigurationNebulaAPIModel,
@@ -8,9 +9,9 @@ from models.configuration import (
 
 
 class Config:
-    def __init__(self) -> None:
+    def __init__(self, configPath: Path = Path("config/config.ini")) -> None:
         configOriginal = ConfigParser()
-        configOriginal.read("config.example.ini")
+        configOriginal.read(configPath)
         self.__CONFIG = ConfigurationModel(
             NebulaAPI=ConfigurationNebulaAPIModel(
                 USER_API_TOKEN=configOriginal["NebulaAPI"]["USER_API_TOKEN"],

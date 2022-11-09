@@ -1,7 +1,7 @@
 from requests import get as requests_get
 import logging
 from time import sleep
-from models.nebula.Steaming import NebulaVideoContentStreamingResponseModel
+from models.nebula.Streaming import NebulaVideoContentStreamingResponseModel
 from models.urls import NEBULA_API_VIDEO_STREAM_INFORMATION
 
 
