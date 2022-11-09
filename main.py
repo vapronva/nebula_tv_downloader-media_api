@@ -3,10 +3,12 @@ from config.Config import Config
 from NebulaAPI.Authorization import NebulaUserAuthorzation
 from NebulaAPI.VideoFeedFetcher import get_all_channels_slugs_from_video_feed
 from NebulaAPI.ChannelVideos import get_channel_video_content
+from NebulaAPI.StreamingInformation import get_streaming_information_by_episode
 from utils.MetadataFilesManager import (
     create_channel_subdirectory_and_store_metadata_information,
 )
 from utils.Filtering import filter_out_episodes
+from utils.Downloader import download_video, download_subtitles, download_thumbnail
 
 
 logging.basicConfig(
@@ -49,7 +51,7 @@ def main() -> None:
             )
         )
         logging.info("Filtered down to %s episodes", len(filteredEpisodes))
-        create_channel_subdirectory_and_store_metadata_information(
+        channelDirectory = create_channel_subdirectory_and_store_metadata_information(
             channelSlug=channel,
             channelData=channelData.details,
             episodesData=channelData.episodes,
@@ -60,6 +62,23 @@ def main() -> None:
                 "Downloading episode `%s` from channel `%s`",
                 episode.slug,
                 channel,
+            )
+            episodeDirectory = channelDirectory / episode.slug
+            episodeDirectory.mkdir(parents=True, exist_ok=True)
+            download_thumbnail(
+                episode.images.thumbnail.src, episodeDirectory / "thumbnail.jpg"
+            )
+            streamingInformation = get_streaming_information_by_episode(
+                videoSlug=episode.slug,
+                authorizationHeader=NEBULA_AUTH.get_authorization_header(full=True),
+            )
+            download_video(
+                url=streamingInformation.manifest,
+                outputFile=episodeDirectory / f"{episode.slug}",
+            )
+            download_subtitles(
+                subtitiles=streamingInformation.subtitles,
+                outputDirectory=episodeDirectory,
             )
     return
 

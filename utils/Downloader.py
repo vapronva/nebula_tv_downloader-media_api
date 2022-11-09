@@ -59,6 +59,7 @@ def download_subtitles(
             .path.split("/")[-1]
             .replace("-", "_")
             .replace(".", "_")
+            .replace("_vtt", ".vtt")
         )
         outputFilename: Path = outputDirectory / outputName
         with open(outputFilename, "wb") as file:
