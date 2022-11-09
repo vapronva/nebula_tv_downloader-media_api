@@ -13,9 +13,10 @@ class ConfigurationNebulaAPIModel(BaseModel):
 
 
 class ConfigurationNebulaFiltersModel(BaseModel):
-    CATEGORY_SEARCH: bool | str
+    CATEGORY_SEARCH: str | None
     INCLUDE_NEBULA_FIRST: bool = True
     INCLUDE_NEBULA_PLUS: bool = True
+    INCLUDE_NEBULA_ORIGINALS: bool = True
     INCLUDE_REGULAR_VIDEOS: bool = False
     CHANNELS_TO_PARSE: list[str] | None = None
 

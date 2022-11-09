@@ -23,12 +23,17 @@ class Config:
                 else None,
             ),
             NebulaFilters=ConfigurationNebulaFiltersModel(
-                CATEGORY_SEARCH=str(configOriginal["NebulaFilters"]["CATEGORY_SEARCH"]),
+                CATEGORY_SEARCH=str(configOriginal["NebulaFilters"]["CATEGORY_SEARCH"])
+                if not configOriginal["NebulaFilters"]["CATEGORY_SEARCH"] == "false"
+                else None,
                 INCLUDE_NEBULA_FIRST=bool(
                     configOriginal["NebulaFilters"]["INCLUDE_NEBULA_FIRST"]
                 ),
                 INCLUDE_NEBULA_PLUS=bool(
                     configOriginal["NebulaFilters"]["INCLUDE_NEBULA_PLUS"]
+                ),
+                INCLUDE_NEBULA_ORIGINALS=bool(
+                    configOriginal["NebulaFilters"]["INCLUDE_NEBULA_ORIGINALS"]
                 ),
                 INCLUDE_REGULAR_VIDEOS=bool(
                     configOriginal["NebulaFilters"]["INCLUDE_REGULAR_VIDEOS"]
