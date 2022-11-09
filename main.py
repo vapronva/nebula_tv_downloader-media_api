@@ -24,7 +24,7 @@ def main() -> None:
         cursorTimesLimitFetchMaximum=1,
         okShouldReturnAllEpisodesListActually=True,
     )
-    if len(result) > 0:
+    if len(result) > 0:  # skipcq: PTC-W0048
         if isinstance(result[0], NebulaChannelVideoContentEpisodeResult):
             try:
                 episodes: list[
@@ -32,7 +32,7 @@ def main() -> None:
                 ] = result  # type: ignore
             except Exception:
                 raise Exception(
-                    f"Failed to cast episodes to `list[NebulaChannelVideoContentEpisodeResult]`"
+                    "Failed to cast episodes to `list[NebulaChannelVideoContentEpisodeResult]`"
                 )
             episodes = list(
                 filter_out_episodes(

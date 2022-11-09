@@ -12,7 +12,7 @@ def download_video(
     quiet: bool = False,
     downloadFormat: str = "bestvideo+bestaudio/best",
     maxFileSize: int | None = None,
-    subtitleLanguages: list[str] = ["en", "de", "ru"],
+    subtitleLanguages: list[str] = ["en", "de", "ru"],  # skipcq: PYL-W0102
 ) -> None:
     ydl_opts = {
         "outtmpl": outputFile.__str__() + ".%(ext)s",
@@ -24,8 +24,8 @@ def download_video(
         "embedchapters": True,
         "subtitleslangs": subtitleLanguages,
         "convertthumbnails": "jpg",
+        "max_filesize": maxFileSize,
     }
-    ydl_opts["max_filesize"] = maxFileSize if maxFileSize is not None else None
     with YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
     return
@@ -41,9 +41,8 @@ def download_thumbnail(
         file.write(requests.get(url).content)
     if compressImage:
         img = Image.open(outputFile)
-        img.thumbnail(
-            maxResolution, Image.Resampling.LANCZOS
-        ) if maxResolution is not None else None
+        if maxResolution is not None:
+            img.thumbnail(maxResolution, Image.Resampling.LANCZOS)
         img.save(outputFile, format="JPEG", quality=85, optimize=True, progressive=True)
     return
 
