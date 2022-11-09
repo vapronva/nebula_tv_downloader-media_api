@@ -13,7 +13,8 @@ class NebulaUserAuthorzation:
 
     def __fetch_authrizaton_token(self) -> None:
         logging.debug(
-            "Fetching authorization token with user token %s...", self.__USER_TOKEN[:5]
+            "Fetching authorization token with user token `%s...`",
+            self.__USER_TOKEN[:5],
         )
         if self.__AUTHORIZATION_HEADER:
             logging.debug(

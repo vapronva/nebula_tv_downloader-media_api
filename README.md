@@ -22,7 +22,7 @@ There are currently no known limitations to the number of videos you can downloa
 
 But there are some limitations in this tool:
 
-- The tool internal logic is based on the assumption that you want to download *all* the videos from a given channel;
+- The tool's internal logic is based on the assumption that you want to download *all* the videos from a given channel;
 - No user agent spoofing (since Nebula API doesn't seem to care about it, but it will be added in the future);
 - No multi-threading by design (just to be on the safe side);
 - No Classes downloader (but will be added in the future).

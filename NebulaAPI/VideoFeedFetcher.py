@@ -61,5 +61,5 @@ def get_all_channels_slugs_from_video_feed(
             channels  # if not okShouldReturnAllEpisodesListActually else data.results
         )
     raise Exception(
-        f"Failed to get video feed: `{response.content[:30]}...` with status code {response.status_code}"
+        f"Failed to get video feed: `{response.content}` with status code {response.status_code}"
     )
