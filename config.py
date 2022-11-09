@@ -12,6 +12,9 @@ class Config:
                 AUTHORIZATION_HEADER=configOriginal["NebulaAPI"][
                     "AUTHORIZATION_HEADER"
                 ],
+                USER_AGENT=configOriginal["NebulaAPI"]["USER_AGENT"]
+                if configOriginal["NebulaAPI"]["USER_AGENT"]
+                else None,
             ),
             NebulaFilters=ConfigurationNebulaFiltersModel(
                 CATEGORY_SEARCH=str(configOriginal["NebulaFilters"]["CATEGORY_SEARCH"]),

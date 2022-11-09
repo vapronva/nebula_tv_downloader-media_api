@@ -1,4 +1,3 @@
-from pathlib import Path
 from pydantic import HttpUrl, parse_obj_as
 
 
