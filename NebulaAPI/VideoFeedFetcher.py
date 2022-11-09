@@ -1,10 +1,7 @@
 from requests import get as requests_get
 import logging
 from models.urls import NEBULA_API_CONTENT_ALL_VIDEOS
-from models.nebula.Fetched import (
-    NebulaChannelVideoContentEpisodes,
-    NebulaChannelVideoContentEpisodeResult,
-)
+from models.nebula.Fetched import NebulaChannelVideoContentEpisodes
 
 
 def get_all_channels_slugs_from_video_feed(

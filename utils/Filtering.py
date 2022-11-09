@@ -19,10 +19,11 @@ def filter_out_episodes(
     logging.debug("Applicable filters: %s", applicableFilters)
     logging.debug("Include regular videos: %s", filterSettings.INCLUDE_REGULAR_VIDEOS)
     for episode in episodes:
-        if applicableFilters:
-            if any(filter in episode.attributes for filter in applicableFilters):
-                yield episode
-                continue
+        if applicableFilters and any(
+            filter in episode.attributes for filter in applicableFilters
+        ):
+            yield episode
+            continue
         if filterSettings.INCLUDE_REGULAR_VIDEOS and (
             not episode.attributes
             or [VideoNebulaAttributes.FREE_SAMPLE_ELIGIBLE] == episode.attributes
