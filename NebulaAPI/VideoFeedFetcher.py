@@ -11,8 +11,7 @@ def get_all_channels_slugs_from_video_feed(
     authorizationHeader: str,
     categoryFeedSelector: str | None = None,
     cursorTimesLimitFetchMaximum: int = 100,
-    okShouldReturnAllEpisodesListActually: bool = False,
-) -> list[str] | list[NebulaChannelVideoContentEpisodeResult]:
+) -> list[str]:
     response = requests_get(
         url=NEBULA_API_CONTENT_ALL_VIDEOS.format(
             CATEGORY_QUERY=f"?category={categoryFeedSelector}"
@@ -61,7 +60,9 @@ def get_all_channels_slugs_from_video_feed(
             else "",
         )
         logging.debug("Found channels: %s", channels)
-        return channels if not okShouldReturnAllEpisodesListActually else data.results
+        return (
+            channels  # if not okShouldReturnAllEpisodesListActually else data.results
+        )
     raise Exception(
         f"Failed to get video feed: `{response.content[:30]}...` with status code {response.status_code}"
     )

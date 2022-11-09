@@ -26,17 +26,17 @@ class Config:
                 CATEGORY_SEARCH=str(configOriginal["NebulaFilters"]["CATEGORY_SEARCH"])
                 if not configOriginal["NebulaFilters"]["CATEGORY_SEARCH"] == "false"
                 else None,
-                INCLUDE_NEBULA_FIRST=bool(
-                    configOriginal["NebulaFilters"]["INCLUDE_NEBULA_FIRST"]
+                INCLUDE_NEBULA_FIRST=configOriginal.getboolean(
+                    "NebulaFilters", "INCLUDE_NEBULA_FIRST"
                 ),
-                INCLUDE_NEBULA_PLUS=bool(
-                    configOriginal["NebulaFilters"]["INCLUDE_NEBULA_PLUS"]
+                INCLUDE_NEBULA_PLUS=configOriginal.getboolean(
+                    "NebulaFilters", "INCLUDE_NEBULA_PLUS"
                 ),
-                INCLUDE_NEBULA_ORIGINALS=bool(
-                    configOriginal["NebulaFilters"]["INCLUDE_NEBULA_ORIGINALS"]
+                INCLUDE_NEBULA_ORIGINALS=configOriginal.getboolean(
+                    "NebulaFilters", "INCLUDE_NEBULA_ORIGINALS"
                 ),
-                INCLUDE_REGULAR_VIDEOS=bool(
-                    configOriginal["NebulaFilters"]["INCLUDE_REGULAR_VIDEOS"]
+                INCLUDE_REGULAR_VIDEOS=configOriginal.getboolean(
+                    "NebulaFilters", "INCLUDE_REGULAR_VIDEOS"
                 ),
                 CHANNELS_TO_PARSE=configOriginal["NebulaFilters"][
                     "CHANNELS_TO_PARSE"
