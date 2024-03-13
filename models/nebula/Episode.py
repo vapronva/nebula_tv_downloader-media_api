@@ -41,4 +41,4 @@ class NebulaChannelVideoContentEpisodeResult(BaseModel):
     share_url: str
     channel: HttpUrl | None
     engagement: dict | None
-    zype_id: str
+    zype_id: str | None
