@@ -26,7 +26,7 @@ def get_streaming_information_by_episode(
         return NebulaVideoContentStreamingResponseModel(**response.json())
     elif response.status_code == 403:
         logging.info(
-            "The authorization token is invalid (got restricted), retrying in %s seconds... (status code: %s) (you should probably buy a new subscription or contact the support)",
+            "The authorization token is invalid (got restricted), retrying in %s seconds... (status code: %s) (you should probably buy a new subscription or contact support)",
             retryAfterUnsuccessfulSeconds,
             response.status_code,
         )
@@ -38,7 +38,7 @@ def get_streaming_information_by_episode(
         )
     elif response.status_code == 429:
         logging.warning(
-            "Thtrottled by Nebula API while getting streaming information for `%s`, waiting for %s seconds...",
+            "Throttled by Nebula API while getting streaming information for `%s`, waiting for %s seconds...",
             videoSlug,
             retryAfterUnsuccessfulSeconds,
         )
