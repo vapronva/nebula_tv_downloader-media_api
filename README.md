@@ -20,12 +20,12 @@ You can buy one on official website ([nebula.tv](https://nebula.tv)), via influe
 
 There are currently no known limitations to the number of videos you can download from the Nebula.
 
-But there are some limitations in this tool:
+There are some limitations in this tool:
 
-- The tool's internal logic is based on the assumption that you want to download *all* the videos from a given channel;
-- No user agent spoofing (since Nebula API doesn't seem to care about it, but it will be added in the future);
-- No multi-threading by design (just to be on the safe side);
-- No Classes downloader (but will be added in the future).
+- The tool's internal logic is based on the assumption that you want to download *all* the videos from a given channel
+- No user agent spoofing (since Nebula API doesn't seem to care about it, but it will be added in the future)
+- No multi-threading by design (just to be on the safe side)
+- No Classes downloader (but will be added in the future)
 
 ## What is This?
 
@@ -33,7 +33,7 @@ Simple project that will parse and download *all* videos from Nebula channels (o
 
 ### Why?
 
-If you can find inifinite money glitch, you can just download every video on Nebula. But if you can't, you can still download all videos from a channel you like. \
+If you can find infinite money glitch, you can just download every video on Nebula. But if you can't, you can still download all videos from a channel you like. \
 Also, having a local copy of online-videos on a streaming service is a good idea, in case the service goes down.
 
 ## How to Use
